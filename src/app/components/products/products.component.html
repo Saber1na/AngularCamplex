@@ -1,0 +1,83 @@
+<main id="produtos">
+  <section class="lista-produtos">
+   <div class="container__produto">
+     <h1 class="titulo__produto">Produtos</h1>
+     <div class="filtro__produto">
+       <span> {{ products.length }} Produtos</span>
+       <select [(ngModel)]="ordenacao" (change)="ordenarProdutos()">
+         <option value="popular">Mais Populares</option>
+         <option value="menor-preco">Menor Preço</option>
+         <option value="maior-preco">Maior Preço</option>
+       </select>
+     </div>
+     <div class="filtro__busca__produtos">
+       <input type="text" placeholder="Buscar produtos..." [(ngModel)]="searchTerm"/>
+       <button (click)="buscarProdutos()">Buscar</button>
+     </div>
+     <div class="filtro__opcoes__produtos">
+       <label>
+         <input type="checkbox" [(ngModel)]="filtroFreteGratis"/>
+         Frete grátis
+       </label>
+     </div>
+     <div>
+       <ul class="produto__conteudo">
+         <li *ngFor="let produto of filteredProducts">
+           <article class="produto__conteudo__item">
+             <img [src]="produto.image" [alt]="produto.name" />
+             <h3>{{ produto.name }}</h3>
+             <p>{{ produto.description }}</p>
+             <div class="produto__conteudo__preco">
+               <span class="preco__original">
+                 {{ produto.value | currency:'BRL':'symbol':'1.2-2' }}
+               </span>
+               <span class="preco__desconto">
+                 {{ produto.discount | currency:'BRL':'symbol':'1.2-2' }}
+               </span>
+             </div>
+             <span class="produto__avaliacoes">⭐ {{ produto.rating }}</span>
+             <div class="produto__conteudo__botoes" button>
+               <button (click)="openPopup(produto)">Comprar</button>
+             </div>
+           </article>
+         </li>
+       </ul>
+     </div>
+   </div>
+  </section>
+</main>
+<div class="notificacao" *ngIf="mensagem">
+  {{ mensagem }}
+</div>
+
+<div *ngIf="isPopupVisible" class="popup">
+ <div class="popup-content">
+    <section>
+     <div class="container">
+       <div class="container_imagem">
+         <img [src]="produtoSelecionado?.image" alt="{{ produtoSelecionado?.name }}" class="w-full h-auto rounded-lg" />
+       </div>
+     </div>
+     <div class="alinhamento" >
+       <div class="container_descricao">
+         <h3>Produto Selecionado: {{ produtoSelecionado?.name }}</h3>
+         <div class="descricao_preco">
+         <span class="preco__original">{{ produtoSelecionado?.value | currency:'BRL':'symbol':'1.2-2' }}</span>
+         <span class="preco__desconto">{{ produtoSelecionado?.discount | currency:'BRL':'symbol':'1.2-2' }}</span>
+        </div>
+         <div class="container__descricao__detalhes">
+           <h3>Descrição</h3>
+           <p>{{ produtoSelecionado?.description }}</p>
+         </div>
+         <div class="produto__conteudo__botoes__popup">
+         <button (click)="adicionarAoCarrinho(produtoSelecionado)">Adicionar ao carrinho</button>
+         <button (click)="closePopup()">Fechar</button>
+         </div>
+       </div>
+     </div>
+    </section>
+ </div>
+</div>
+
+
+
